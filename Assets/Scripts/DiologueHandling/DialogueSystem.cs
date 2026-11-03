@@ -31,6 +31,7 @@ public class DialogueSystem : MonoBehaviour
         {
             _canContinueDialogue = false;
             yield return StartCoroutine(ShowDialogue(dialogueBox.dialogueLines[i]));
+            PlayerDialogueHolder.SetPlayerDialogueOption(Players.RedPlayer);
 
             while (!_canContinueDialogue)
             {
@@ -54,7 +55,7 @@ public class DialogueSystem : MonoBehaviour
         {
             currentText += text[i];
             dialogueText.text = currentText;
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(.02f);
         }
     }
 

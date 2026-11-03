@@ -443,7 +443,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 5d98ce786cc746a429a56761b4487d20, type: 2}
     - target: {fileID: 3566194632423379902, guid: c52c91945d56f6047a17ddd12b282b8a, type: 3}
       propertyPath: m_Name
-      value: Player (1)
+      value: BluePlayer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -625,6 +625,51 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
+--- !u!1 &381323193
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 381323195}
+  - component: {fileID: 381323194}
+  m_Layer: 0
+  m_Name: DialogueHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &381323194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 381323193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87c08e2bf1595924ab7176ee375d2069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueHolder
+  entries: []
+--- !u!4 &381323195
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 381323193}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.48559, y: 0.5, z: 2.33432}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -880,7 +925,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &440200397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1300,13 +1345,13 @@ MonoBehaviour:
   _response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 636958034}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 0
+      - m_Target: {fileID: 636958038}
+        m_TargetAssemblyTypeName: DialogueSystem, Assembly-CSharp
+        m_MethodName: ContinueDialogue
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1366,7 +1411,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 2da70f1ae9ff4494baef1c9617aa1d5c, type: 2}
     - target: {fileID: 3566194632423379902, guid: c52c91945d56f6047a17ddd12b282b8a, type: 3}
       propertyPath: m_Name
-      value: Player (2)
+      value: GreenPlayer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1522,7 +1567,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &926773266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2108,7 +2153,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3566194632423379902, guid: c52c91945d56f6047a17ddd12b282b8a, type: 3}
       propertyPath: m_Name
-      value: Player
+      value: RedPlayer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2129,6 +2174,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1684076305}
+  - component: {fileID: 1684076306}
   m_Layer: 0
   m_Name: Players
   m_TagString: Untagged
@@ -2155,6 +2201,23 @@ Transform:
   - {fileID: 1903292604}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1684076306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1684076304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1e592e5d318e8c4482d1ecf850174fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerIniatialize
+  players:
+  - {fileID: 1615081081}
+  - {fileID: 235765726}
+  - {fileID: 679843127}
+  - {fileID: 1903292604}
 --- !u!1 &1883460263
 GameObject:
   m_ObjectHideFlags: 0
@@ -2284,7 +2347,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: fad04586288bc634bb44d4f8061bf5c8, type: 2}
     - target: {fileID: 3566194632423379902, guid: c52c91945d56f6047a17ddd12b282b8a, type: 3}
       propertyPath: m_Name
-      value: Player (3)
+      value: YellowPlayer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2420,3 +2483,4 @@ SceneRoots:
   - {fileID: 2072766559}
   - {fileID: 1684076305}
   - {fileID: 181517483}
+  - {fileID: 381323195}
