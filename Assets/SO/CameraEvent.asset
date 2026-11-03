@@ -9,6 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1268a26e4107c5144a487095cbcfd1fc, type: 3}
-  m_Name: EpicEvent
-  m_EditorClassIdentifier: Assembly-CSharp::GameEventCoroutine
+  m_Script: {fileID: 11500000, guid: df58d0d5802bfe545b8b649c5797cf25, type: 3}
+  m_Name: CameraEvent
+  m_EditorClassIdentifier: Assembly-CSharp::CameraEvent
