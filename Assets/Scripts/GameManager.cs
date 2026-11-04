@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-   
+    [SerializeField] private BoolEvent startEvent;
     private void Start()
     {
-        StartCoroutine(DialogueSystem.Instance.HandleDialogue("Introduction"));
+        startEvent?.Invoke(true);
     }
 }

@@ -8,7 +8,7 @@ public enum Players
     GreenPlayer = 2,
     YellowPlayer = 3
 }
-public static class PlayerDialogueHolder
+public static class PlayerHolder
 {
     public static Transform[] players;
 
@@ -25,6 +25,17 @@ public static class PlayerDialogueHolder
         if (players[(int)player].TryGetComponent(out PlayerDialogueHandler handler))
         {
             handler.LetPlayerContinueDialogue();
+        }
+    }
+
+    public static void SetPlayerUISelection(Players player, GameObject[,] uiSelections)
+    {
+
+        if (players[(int)player] == null) return;
+
+        if (players[(int)player].TryGetComponent(out PlayerUISelectionHandler handler))
+        {
+            handler.SetPossibleGameObjects(uiSelections);
         }
     }
 }

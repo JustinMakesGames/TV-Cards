@@ -16,12 +16,25 @@ public class DialogueBox
     public string characterName;
     public string[] dialogueLines;
     public bool hasChoice;
+    public BoolEvent firstOption;
+    public BoolEvent secondOption;
 
     public DialogueBox(string characterName, string[] dialogueLines)
     {
         this.characterName = characterName;
         this.dialogueLines = dialogueLines;
     }
+
+    public DialogueBox(string characterName, string[] dialogueLines, bool hasChoice, BoolEvent firstOption, BoolEvent secondOption)
+    {
+        this.characterName = characterName;
+        this.dialogueLines = dialogueLines;
+        this.hasChoice = hasChoice;
+        this.firstOption = firstOption;
+        this.secondOption = secondOption;
+    }
+
+
 
 
 }

@@ -6,6 +6,6 @@ public class PlayerIniatialize : MonoBehaviour
 
     private void Start()
     {
-        PlayerDialogueHolder.SetPlayers(players);
+        PlayerHolder.SetPlayers(players);
     }
 }

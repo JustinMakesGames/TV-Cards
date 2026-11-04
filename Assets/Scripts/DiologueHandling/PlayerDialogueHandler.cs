@@ -16,6 +16,7 @@ public class PlayerDialogueHandler : MonoBehaviour
         if (context.started && _canContinueDialogue)
         {
             continueDialogEvent?.Invoke(true);
+            _canContinueDialogue = false;
         }
     }
 }
