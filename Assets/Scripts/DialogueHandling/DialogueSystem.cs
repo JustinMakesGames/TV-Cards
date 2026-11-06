@@ -24,6 +24,24 @@ public class DialogueSystem : MonoBehaviour
         }
     }
 
+    public IEnumerator HandleSingularDialogue(string dialogue)
+    {
+        dialogueGameObject?.SetActive(true);
+        yield return StartCoroutine(HandleDialogueLine(dialogue));
+        dialogueGameObject?.SetActive(false);
+    }
+    private IEnumerator HandleDialogueLine(string dialogue)
+    {
+        _canContinueDialogue = false;
+        yield return StartCoroutine(ShowDialogue(dialogue));
+        PlayerHolder.SetPlayerDialogueOption(Players.RedPlayer);
+
+        while (!_canContinueDialogue)
+        {
+            yield return null;
+        }
+    }
+
     public IEnumerator HandleDialogue(string dialogueType)
     {
 
@@ -33,15 +51,7 @@ public class DialogueSystem : MonoBehaviour
         dialogueGameObject?.SetActive(true);
         for (int i = 0; i < _currentDialogueBox.dialogueLines.Length; i++)
         {
-            _canContinueDialogue = false;
-            yield return StartCoroutine(ShowDialogue(_currentDialogueBox.dialogueLines[i]));
-            PlayerHolder.SetPlayerDialogueOption(Players.RedPlayer);
-
-            while (!_canContinueDialogue)
-            {
-                yield return null;
-            } 
-
+            yield return StartCoroutine(HandleDialogueLine(_currentDialogueBox.dialogueLines[i]));
         }
 
         if (_currentDialogueBox.hasChoice)

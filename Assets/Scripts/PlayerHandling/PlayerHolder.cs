@@ -17,6 +17,10 @@ public static class PlayerHolder
         players = newPlayers;
     }
 
+    public static Transform[] ReturnPlayers()
+    {
+        return players;
+    }
     public static void SetPlayerDialogueOption(Players player)
     {
 
@@ -38,4 +42,6 @@ public static class PlayerHolder
             handler.SetPossibleGameObjects(uiSelections);
         }
     }
+
+    
 }

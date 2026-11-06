@@ -33,12 +33,7 @@ public class DialogueBox
         this.firstOption = firstOption;
         this.secondOption = secondOption;
     }
-
-
-
-
 }
-
 
 public class DialogueHolder : MonoBehaviour
 {

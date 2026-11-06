@@ -193,7 +193,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8186526575438704652
 Transform:
   m_ObjectHideFlags: 0
@@ -267,6 +267,9 @@ GameObject:
   - component: {fileID: 3264044459802916132}
   - component: {fileID: 8116674980689286513}
   - component: {fileID: 4306076850101457695}
+  - component: {fileID: 4746967401379294802}
+  - component: {fileID: 2400012053457909361}
+  - component: {fileID: 9114930642403566242}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -410,6 +413,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2400012053457909361}
+        m_TargetAssemblyTypeName: PlayerCardPickSystem, Assembly-CSharp
+        m_MethodName: MoveForCards
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 351f2ccd-1f9f-44bf-9bec-d62ac5c5f408
     m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
@@ -445,6 +460,18 @@ MonoBehaviour:
       - m_Target: {fileID: 4306076850101457695}
         m_TargetAssemblyTypeName: PlayerUISelectionHandler, Assembly-CSharp
         m_MethodName: PressButton
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2400012053457909361}
+        m_TargetAssemblyTypeName: PlayerCardPickSystem, Assembly-CSharp
+        m_MethodName: PressCard
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -539,3 +566,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerUISelectionHandler
   cursor: {fileID: 393645983085304774}
+--- !u!114 &4746967401379294802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3566194632423379902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5397df007f784904ca6224ab485002d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CPUCardHandling
+  minimumCardMovement: 2
+  maximumCardMovement: 5
+  minimumThinkTime: 0.5
+  maximumThinkTime: 2
+--- !u!114 &2400012053457909361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3566194632423379902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daa611b4ffe2dd7449967a0a45ec3de8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCardPickSystem
+  cursor: {fileID: 393645983085304774}
+--- !u!114 &9114930642403566242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3566194632423379902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfca16ae8504d9e46b6b9ca2cd78836f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerOrCPUChecker
+  playerOrCPU: 0

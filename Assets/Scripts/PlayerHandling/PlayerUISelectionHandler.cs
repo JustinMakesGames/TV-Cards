@@ -7,6 +7,7 @@ public class GameObjectRow
 {
     public List<GameObject> objects;
 }
+
 public class PlayerUISelectionHandler : MonoBehaviour
 {
     [SerializeField] private GameObject[,] possibleSelectedGameObjects;
@@ -33,22 +34,22 @@ public class PlayerUISelectionHandler : MonoBehaviour
 
         Vector2 value = context.ReadValue<Vector2>();
 
-        if (value.x > 0)
+        if (value.x > 0f)
         {
             _coordinates.x++;
         }
 
-        else if (value.x < 0)
+        else if (value.x < 0f)
         {
             _coordinates.x--;
         }
 
-        else if (value.y > 0)
+        else if (value.y > 0f)
         {
             _coordinates.y--;
         }
 
-        else if (value.y < 0)
+        else if (value.y < 0f)
         {
             _coordinates.y++;
         }
@@ -74,8 +75,21 @@ public class PlayerUISelectionHandler : MonoBehaviour
         _coordinates.y = Mathf.Clamp(_coordinates.y, 0, possibleSelectedGameObjects.GetLength(1) - 1);
 
         _selectedObject = possibleSelectedGameObjects[_coordinates.x, _coordinates.y];
-        cursor.transform.position = _selectedObject.transform.position;
+        cursor.transform.position = ReturnCursorPosition();
 
+    }
+
+    private Vector3 ReturnCursorPosition()
+    {
+        Vector3[] corners = new Vector3[4];
+
+        if (_selectedObject.TryGetComponent(out RectTransform rectTransform)) 
+        {
+            rectTransform.GetWorldCorners(corners);
+            return corners[1];
+        }
+
+        return _selectedObject.transform.position;
     }
 
 
