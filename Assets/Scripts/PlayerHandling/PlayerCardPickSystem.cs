@@ -14,10 +14,10 @@ public class PlayerCardPickSystem : MonoBehaviour
 
     public void SetCards(List<GameObject> cards)
     {
+        _currentLocation = 0;
         _cards = cards;
         _canChooseCard = true;
         cursor?.SetActive(true);
-        _selectedCard = cards[0];
         HandleCardSelectionMovement(true);
 
         if (TryGetComponent(out PlayerOrCPUChecker playerOrCPUChecker))

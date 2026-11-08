@@ -26,6 +26,6 @@ public class BasicCardHandler : MonoBehaviour, ICardHandler
 
     public virtual void OnPressed(Transform player) 
     {
-
+        OnDehovered();
     }
 }

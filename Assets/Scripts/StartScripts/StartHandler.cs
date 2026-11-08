@@ -91,6 +91,8 @@ public class StartHandler : MonoBehaviour
         }
 
         destroyCardsEvent?.Invoke(true);
+
+        GameManager.Instance.SetPlayers(_sortedPlayers);
     }
 
     

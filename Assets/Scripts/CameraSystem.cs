@@ -9,7 +9,9 @@ public enum CameraKind
     RedCamera = 3,
     BlueCamera = 4,
     GreenCamera = 5,
-    YellowCamera = 6
+    YellowCamera = 6,
+    GridCamera = 7,
+    PlayerCamera = 8
 }
 public class CameraSystem : MonoBehaviour
 {
