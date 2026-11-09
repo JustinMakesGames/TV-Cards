@@ -10,7 +10,7 @@ public class CameraWatcher : MonoBehaviour
     }
 
     private void LateUpdate()
-    {
+    { 
         transform.LookAt(_camera.transform);
         transform.Rotate(0, 180, 0);
     }

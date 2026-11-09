@@ -19,7 +19,7 @@ public class MovementCardHandling : BasicCardHandler, ICardHandler
 
         if (player.TryGetComponent(out PlayerMovementHandler playerMovementHandler))
         {
-            playerMovementHandler.StartMovement(_movement);
+            playerMovementHandler.StartMovement(gameObject, _movement);
         }
 
         transform.parent.gameObject?.SetActive(false);

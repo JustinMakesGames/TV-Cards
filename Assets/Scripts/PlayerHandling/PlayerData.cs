@@ -60,6 +60,11 @@ public class PlayerData : MonoBehaviour
         }
     }
 
+    public void RemoveBasicCard(BasicCardHandler cardHandler)
+    {
+        playerCards.Remove(cardHandler);
+    }
+
     public void SetPosition(Vector2Int gridPosition)
     {
         Vector3 position = GridHandler.Instance.ReturnPosition(gridPosition);
@@ -72,5 +77,10 @@ public class PlayerData : MonoBehaviour
     public Vector2Int ReturnPlayerPosition()
     {
         return _currentPlayerPosition;
+    }
+
+    public Transform ReturnPlayerObject()
+    {
+        return gridPlayerObject.transform;
     }
 }

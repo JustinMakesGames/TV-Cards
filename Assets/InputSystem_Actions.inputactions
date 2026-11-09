@@ -1022,17 +1022,6 @@
             ]
         },
         {
-            "name": "Touch",
-            "bindingGroup": "Touch",
-            "devices": [
-                {
-                    "devicePath": "<Touchscreen>",
-                    "isOptional": false,
-                    "isOR": false
-                }
-            ]
-        },
-        {
             "name": "Joystick",
             "bindingGroup": "Joystick",
             "devices": [

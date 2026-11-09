@@ -564,6 +564,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 5443975298899479644}
+        m_TargetAssemblyTypeName: PlayerMovementHandler, Assembly-CSharp
+        m_MethodName: SelectSpaceInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: f1ba0d36-48eb-4cd5-b651-1c94a6531f70
     m_ActionName: 'Player/Jump[/Keyboard/space]'
   - m_PersistentCalls:
@@ -736,6 +748,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovementHandler
   selectionObject: {fileID: 4475494518829443528, guid: 3b57314c4c64e6e4cbba8130140e8dcd, type: 3}
+  playerMovementSpeed: 1
 --- !u!1 &4094255516985592370
 GameObject:
   m_ObjectHideFlags: 0

@@ -90,7 +90,8 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator StartPlayerTurn()
     {
-        _currentPlayer++;
+
+        _currentPlayer = (_currentPlayer >= players.Count - 1) ? 0 : _currentPlayer + 1;
         cameraEvent?.Invoke(CameraKind.GridCamera);
         yield return new WaitForSeconds(2);
         
