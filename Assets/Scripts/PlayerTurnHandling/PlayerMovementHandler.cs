@@ -52,7 +52,21 @@ public class PlayerMovementHandler : MonoBehaviour
         _walkedTiles.Add(_currentTile);
         SetNumber();
 
-        
+        HandleCPU();
+    }
+
+    private void HandleCPU()
+    {
+        if (TryGetComponent(out PlayerOrCPUChecker playerOrCPUChecker) && playerOrCPUChecker.PlayerOrCPU() == PlayerOrCPU.CPU)
+        {
+            // Add the CPU movement component if the scene doesn't have it yet, so CPUs can always move.
+            if (!TryGetComponent(out CPUMovementHandler cpuMovementHandler))
+            {
+                cpuMovementHandler = gameObject.AddComponent<CPUMovementHandler>();
+            }
+
+            cpuMovementHandler.StartCPUMovement(_playerPosition, _walkedTileNumber);
+        }
     }
 
 
@@ -181,7 +195,7 @@ public class PlayerMovementHandler : MonoBehaviour
         {
             Vector3 position = ReturnPosition(_walkedTiles[i]);
 
-            yield return StartCoroutine(MoveToPosition(position));
+            yield return StartCoroutine(MoveToPosition(_walkedTiles[i], position));
         }
 
         if (TryGetComponent(out PlayerData playerData))
@@ -189,7 +203,10 @@ public class PlayerMovementHandler : MonoBehaviour
             playerData.SetPosition(_playerPosition);
         }
 
-        StartCoroutine(GameManager.Instance.StartPlayerTurn());
+        if (TryGetComponent(out PlayerTurnHandling playerTurnHandling))
+        {
+            playerTurnHandling.StartPlayerTurn();
+        }
 
     }
 
@@ -197,7 +214,7 @@ public class PlayerMovementHandler : MonoBehaviour
     {
         return tile.transform.position + Vector3.up * 0.2f;
     }
-    private IEnumerator MoveToPosition(Vector3 position)
+    private IEnumerator MoveToPosition(GameObject tile, Vector3 position)
     {
         while (Vector3.Distance(_playerObject.position, position) > 0.01f)
         {
@@ -208,7 +225,7 @@ public class PlayerMovementHandler : MonoBehaviour
         _playerObject.position = position;
     }
 
-
+    
     
 
     

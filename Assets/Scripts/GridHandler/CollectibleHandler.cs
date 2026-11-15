@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CollectibleHandler : MonoBehaviour
 {
-    public virtual void GetCollectible()
+    public virtual void GetCollectible(Transform player)
     {
         
     }

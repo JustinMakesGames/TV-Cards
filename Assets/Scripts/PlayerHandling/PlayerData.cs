@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerData : MonoBehaviour
@@ -7,35 +8,41 @@ public class PlayerData : MonoBehaviour
     public int HeartPoints { get; private set; }
 
     [SerializeField] private GameObject gridPlayerObject;
-    [SerializeField] private Transform playerCardFolder;
-    public List<BasicCardHandler> playerCards;
+
+    [SerializeField] private Transform movementCardFolder;
+    [SerializeField] private Transform attackCardFolder;
+    [SerializeField] private Transform eventCardFolder;
+
+    [SerializeField] private TMP_Text heartPointsText;
+    [SerializeField] private TMP_Text coinText;
+ 
+    public List<BasicCardHandler> cardHandlers;
+    public List<MovementCardHandling> movementCards;
+    public List<AttackCardHandler> attackCards;
 
     private Vector2Int _currentPlayerPosition;
 
 
 
-    private void Start()
-    {
-        
-    }
-
     public void ChangeCoinAmount(int coinNumber)
     {
         Coins += coinNumber;
+        if (coinText) coinText.text = coinNumber.ToString();
     }
 
     public void ChangeHeartPointsAmount(int heartPoints)
     {
         HeartPoints += heartPoints;
+        if (heartPointsText) heartPointsText.text = HeartPoints.ToString();
     }
 
     public void GetBasicCard(CardStats card)
     {
-        GameObject newCard = Instantiate(card.card, playerCardFolder);
+        GameObject newCard = Instantiate(card.card, eventCardFolder);
 
         if (newCard.TryGetComponent(out BasicCardHandler cardHandler))
         {
-            playerCards.Add(cardHandler);
+             cardHandlers.Add(cardHandler);
         }
 
         else
@@ -46,12 +53,28 @@ public class PlayerData : MonoBehaviour
 
     public void GetMovementCard(MovementCardStats card)
     {
-        GameObject newCard = Instantiate(card.card, playerCardFolder);
+        GameObject newCard = Instantiate(card.card, movementCardFolder);
 
         if (newCard.TryGetComponent(out MovementCardHandling cardHandler))
         {
-            playerCards.Add(cardHandler);
+            movementCards.Add(cardHandler);
             cardHandler.SetMovement(card.movement);
+        }
+
+        else
+        {
+            Destroy(newCard);
+        }
+    }
+
+    public void GetAttackCard(AttackCardStats card)
+    {
+        GameObject newCard = Instantiate(card.card, attackCardFolder);
+
+        if (newCard.TryGetComponent(out AttackCardHandler cardHandler))
+        {
+            attackCards.Add(cardHandler);
+            cardHandler.SetRange(transform, card.range);
         }
 
         else
@@ -62,21 +85,54 @@ public class PlayerData : MonoBehaviour
 
     public void RemoveBasicCard(BasicCardHandler cardHandler)
     {
-        playerCards.Remove(cardHandler);
+        if (cardHandlers.Contains(cardHandler))
+        {
+            cardHandlers.Remove(cardHandler);
+        }
+    }
+
+    public void RemoveMovementCard(MovementCardHandling movementCardHandling)
+    {
+        if (movementCards.Contains(movementCardHandling))
+        {
+            movementCards.Remove(movementCardHandling);
+        }
+    }
+
+    public void RemoveAttackCard(AttackCardHandler attackCardHandler)
+    {
+        if (attackCards.Contains(attackCardHandler))
+        {
+            attackCards.Remove(attackCardHandler);
+        }
     }
 
     public void SetPosition(Vector2Int gridPosition)
     {
+        GameObject[,] grid = GridHandler.Instance.ReturnGrid();
         Vector3 position = GridHandler.Instance.ReturnPosition(gridPosition);
 
         _currentPlayerPosition = gridPosition;
 
         gridPlayerObject.transform.position = position;
+
+        if (grid[gridPosition.x, gridPosition.y].TryGetComponent(out GridTile gridTile))
+        {
+            gridTile.SetPlayer(transform);
+        }
     }
 
+   
+
+    
     public Vector2Int ReturnPlayerPosition()
     {
         return _currentPlayerPosition;
+    }
+
+    public Transform ReturnMovementCardFolder()
+    {
+        return movementCardFolder;
     }
 
     public Transform ReturnPlayerObject()

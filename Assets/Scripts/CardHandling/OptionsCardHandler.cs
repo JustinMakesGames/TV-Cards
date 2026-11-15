@@ -7,6 +7,11 @@ public class OptionsCardHandler : BasicCardHandler, ICardHandler
 
     [SerializeField] private Transform cardFolder;
 
+    public Transform ReturnCardFolder()
+    {
+        return cardFolder;
+    }
+
     public override void OnPressed(Transform player)
     {
         base.OnPressed(player);
@@ -19,7 +24,10 @@ public class OptionsCardHandler : BasicCardHandler, ICardHandler
             cardPickSystem.SetCards(cards);
         }
 
+
+        gameObject.SetActive(false);
         transform.parent.gameObject?.SetActive(false);
+        
     }
 
     

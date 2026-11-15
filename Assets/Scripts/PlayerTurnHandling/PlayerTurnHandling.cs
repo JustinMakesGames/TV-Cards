@@ -9,6 +9,16 @@ public class PlayerTurnHandling : MonoBehaviour
     [SerializeField] private List<GameObject> options = new List<GameObject>();
     public void StartPlayerTurn()
     {
+        foreach (GameObject option in options)
+        {
+            option.SetActive(true);
+        }
+
+        PlayerChooseCard();
+    }
+
+    public void PlayerChooseCard()
+    {
         if (TryGetComponent(out PlayerCardPickSystem cardPickSystem))
         {
             optionsFolder.gameObject?.SetActive(true);

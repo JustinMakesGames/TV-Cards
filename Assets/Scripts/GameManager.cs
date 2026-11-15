@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Transform> players;
 
     [SerializeField] private CameraEvent cameraEvent;
-    [SerializeField] private TransformEvent randomCardEvent;
+    [SerializeField] private TransformEvent randomMovementCardEvent;
+    [SerializeField] private TransformEvent randomAttackCardEvent;
     private int _currentPlayer = -1;
 
     private void Awake()
@@ -33,6 +34,11 @@ public class GameManager : MonoBehaviour
         SetAllPlayerPlacements();
         SetRandomCards();
         StartCoroutine(StartPlayerTurn());
+    }
+
+    public List<Transform> ReturnPlayers()
+    {
+        return players;
     }
 
     private void SetAllPlayerPlacements()
@@ -60,7 +66,8 @@ public class GameManager : MonoBehaviour
         {
             for (int j = 0; j < 5; j++)
             {
-                randomCardEvent?.Invoke(players[i]);
+                randomMovementCardEvent?.Invoke(players[i]);
+                randomAttackCardEvent?.Invoke(players[i]);
             }
         }
     }
