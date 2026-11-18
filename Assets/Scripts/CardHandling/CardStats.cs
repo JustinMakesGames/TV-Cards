@@ -22,3 +22,16 @@ public class MovementCardStats : CardStats
         this.movement = movement;
     } 
 }
+
+[Serializable]
+public class AttackCardStats : CardStats
+{
+
+    public int range;
+    public int damage;
+    public AttackCardStats(GameObject card, int range, int damage) : base(card)
+    {
+        this.range = range;
+        this.damage = damage;
+    }
+}

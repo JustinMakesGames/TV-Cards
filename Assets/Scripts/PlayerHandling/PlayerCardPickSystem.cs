@@ -27,6 +27,16 @@ public class PlayerCardPickSystem : MonoBehaviour
 
     }
 
+    public List<GameObject> ReturnCards()
+    {
+        return _cards;
+    }
+
+    public int ReturnCurrentLocation()
+    {
+        return _currentLocation;
+    }
+
     public void DehoverCards()
     {
         //HandleDehover();
