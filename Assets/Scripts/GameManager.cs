@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Transform> players;
 
     [SerializeField] private CameraEvent cameraEvent;
-    [SerializeField] private TransformEvent randomCardEvent;
+    [SerializeField] private TransformEvent randomMovementCardEvent;
+    [SerializeField] private TransformEvent randomAttackCardEvent;
     private int _currentPlayer = -1;
 
     private void Awake()
@@ -21,6 +22,8 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
+
+        DontDestroyOnLoad(gameObject);
     }
     private void Start()
     {
@@ -32,7 +35,13 @@ public class GameManager : MonoBehaviour
         this.players = players;
         SetAllPlayerPlacements();
         SetRandomCards();
+        SetCoinsAndHearts();
         StartCoroutine(StartPlayerTurn());
+    }
+
+    public List<Transform> ReturnPlayers()
+    {
+        return players;
     }
 
     private void SetAllPlayerPlacements()
@@ -54,13 +63,26 @@ public class GameManager : MonoBehaviour
 
     }
 
+    private void SetCoinsAndHearts()
+    {
+        foreach (Transform player in players)
+        {
+            if (player.TryGetComponent(out PlayerData playerData))
+            {
+                playerData.ChangeCoinAmount(10);
+                playerData.ChangeHeartPointsAmount(10);
+            }
+        }
+    }
+
     private void SetRandomCards()
     {
         for (int i = 0; i < players.Count; i++)
         {
             for (int j = 0; j < 5; j++)
             {
-                randomCardEvent?.Invoke(players[i]);
+                randomMovementCardEvent?.Invoke(players[i]);
+                randomAttackCardEvent?.Invoke(players[i]);
             }
         }
     }
@@ -90,7 +112,10 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator StartPlayerTurn()
     {
+        if (_currentPlayer >= players.Count - 1)
+        {
 
+        }
         _currentPlayer = (_currentPlayer >= players.Count - 1) ? 0 : _currentPlayer + 1;
         cameraEvent?.Invoke(CameraKind.GridCamera);
         yield return new WaitForSeconds(2);

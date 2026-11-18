@@ -285,7 +285,6 @@ GameObject:
   - component: {fileID: 6367631133560485675}
   - component: {fileID: 8123511535366702535}
   - component: {fileID: 2941091540596395890}
-  - component: {fileID: 7321220217054724022}
   - component: {fileID: 8796146899271113266}
   m_Layer: 5
   m_Name: Card
@@ -396,19 +395,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7321220217054724022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8141506264118993892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 290d5691d9c25f64b80829b920161fd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BasicCardHandler
-  animator: {fileID: 0}
 --- !u!95 &8796146899271113266
 Animator:
   serializedVersion: 7

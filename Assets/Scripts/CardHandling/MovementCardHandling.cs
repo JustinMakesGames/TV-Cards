@@ -13,6 +13,11 @@ public class MovementCardHandling : BasicCardHandler, ICardHandler
         movementText.text = movement.ToString();
     }
 
+    public int ReturnMovement()
+    {
+        return _movement;
+    }
+
     public override void OnPressed(Transform player)
     {
         base.OnPressed(player);
