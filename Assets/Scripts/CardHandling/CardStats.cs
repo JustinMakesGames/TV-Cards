@@ -28,8 +28,10 @@ public class AttackCardStats : CardStats
 {
 
     public int range;
-    public AttackCardStats(GameObject card, int range) : base(card)
+    public int damage;
+    public AttackCardStats(GameObject card, int range, int damage) : base(card)
     {
         this.range = range;
+        this.damage = damage;
     }
 }

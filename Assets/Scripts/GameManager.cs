@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
+
+        DontDestroyOnLoad(gameObject);
     }
     private void Start()
     {
@@ -33,6 +35,7 @@ public class GameManager : MonoBehaviour
         this.players = players;
         SetAllPlayerPlacements();
         SetRandomCards();
+        SetCoinsAndHearts();
         StartCoroutine(StartPlayerTurn());
     }
 
@@ -58,6 +61,18 @@ public class GameManager : MonoBehaviour
         
 
 
+    }
+
+    private void SetCoinsAndHearts()
+    {
+        foreach (Transform player in players)
+        {
+            if (player.TryGetComponent(out PlayerData playerData))
+            {
+                playerData.ChangeCoinAmount(10);
+                playerData.ChangeHeartPointsAmount(10);
+            }
+        }
     }
 
     private void SetRandomCards()
@@ -97,7 +112,10 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator StartPlayerTurn()
     {
+        if (_currentPlayer >= players.Count - 1)
+        {
 
+        }
         _currentPlayer = (_currentPlayer >= players.Count - 1) ? 0 : _currentPlayer + 1;
         cameraEvent?.Invoke(CameraKind.GridCamera);
         yield return new WaitForSeconds(2);

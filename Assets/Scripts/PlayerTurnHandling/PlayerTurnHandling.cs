@@ -3,13 +3,11 @@ using UnityEngine;
 
 public class PlayerTurnHandling : MonoBehaviour
 {
-
     [SerializeField] private Transform optionsFolder;
 
-    [SerializeField] private List<GameObject> options = new List<GameObject>();
     public void StartPlayerTurn()
     {
-        foreach (GameObject option in options)
+        foreach (GameObject option in ListOfChildren.ReturnListOfChildren(optionsFolder))
         {
             option.SetActive(true);
         }
@@ -21,12 +19,31 @@ public class PlayerTurnHandling : MonoBehaviour
     {
         if (TryGetComponent(out PlayerCardPickSystem cardPickSystem))
         {
-            optionsFolder.gameObject?.SetActive(true);
-            cardPickSystem.SetCards(options);
+            optionsFolder.gameObject.SetActive(true);
+            cardPickSystem.SetCards(ReturnAvailableOptions());
         }
     }
 
-    
+    public void RestoreOption(GameObject cardFolder)
+    {
+        foreach (GameObject option in ListOfChildren.ReturnListOfChildren(optionsFolder))
+        {
+            if (option.TryGetComponent(out OptionsCardHandler optionsCard) && optionsCard.ReturnCardFolder() == cardFolder.transform)
+            {
+                option.SetActive(true);
+            }
+        }
+    }
 
-    
+    private List<GameObject> ReturnAvailableOptions()
+    {
+        List<GameObject> available = new List<GameObject>();
+
+        foreach (GameObject option in ListOfChildren.ReturnListOfChildren(optionsFolder))
+        {
+            if (option.activeSelf) available.Add(option);
+        }
+
+        return available;
+    }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class AttackCardHandler : BasicCardHandler, ICardHandler
@@ -6,6 +7,8 @@ public class AttackCardHandler : BasicCardHandler, ICardHandler
     [SerializeField] private int range;
     [SerializeField] private int damage;
     [SerializeField] private GameObject selectionObj;
+    [SerializeField] private TMP_Text rangeText;
+    [SerializeField] private TMP_Text damageText;
 
     private List<GameObject> _tilesInRange = new List<GameObject>();
     private List<GameObject> _selectionObjClones = new List<GameObject>();
@@ -25,10 +28,23 @@ public class AttackCardHandler : BasicCardHandler, ICardHandler
         DestroyShowObjs();
     }
 
-    public void SetRange(Transform player, int range)
+    public int ReturnRange()
+    {
+        return range;
+    }
+
+    public int ReturnDamage()
+    {
+        return damage;
+    }
+
+    public void SetStats(Transform player, int range, int damage)
     {
         _player = player;
         this.range = range;
+        this.damage = damage;
+        rangeText.text = $"Range: {range}";
+        damageText.text = $"Damage: {damage}";
     }
     public override void OnPressed(Transform player)
     {
@@ -38,6 +54,8 @@ public class AttackCardHandler : BasicCardHandler, ICardHandler
         {
             attackHandler.StartAttack(_tilesInRange, range, damage);
         }
+
+        transform.parent.gameObject?.SetActive(false);
 
         
     }

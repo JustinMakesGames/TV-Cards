@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class PlayerData : MonoBehaviour
 {
+    public string playerName;
     public int Coins { get; private set; }
     public int HeartPoints { get; private set; }
+    public Vector2Int currentPlayerPosition;
 
     [SerializeField] private GameObject gridPlayerObject;
 
@@ -20,10 +22,14 @@ public class PlayerData : MonoBehaviour
     public List<MovementCardHandling> movementCards;
     public List<AttackCardHandler> attackCards;
 
-    private Vector2Int _currentPlayerPosition;
 
 
 
+    private void Awake()
+    {
+        playerName = transform.name;
+        DontDestroyOnLoad(gameObject);
+    }
     public void ChangeCoinAmount(int coinNumber)
     {
         Coins += coinNumber;
@@ -74,7 +80,7 @@ public class PlayerData : MonoBehaviour
         if (newCard.TryGetComponent(out AttackCardHandler cardHandler))
         {
             attackCards.Add(cardHandler);
-            cardHandler.SetRange(transform, card.range);
+            cardHandler.SetStats(transform, card.range, card.damage);
         }
 
         else
@@ -112,7 +118,12 @@ public class PlayerData : MonoBehaviour
         GameObject[,] grid = GridHandler.Instance.ReturnGrid();
         Vector3 position = GridHandler.Instance.ReturnPosition(gridPosition);
 
-        _currentPlayerPosition = gridPosition;
+        if (grid[currentPlayerPosition.x, currentPlayerPosition.y].TryGetComponent(out GridTile oldTile) && oldTile.ReturnPlayer() == transform)
+        {
+            oldTile.DeletePlayuer();
+        }
+
+        currentPlayerPosition = gridPosition;
 
         gridPlayerObject.transform.position = position;
 
@@ -127,7 +138,7 @@ public class PlayerData : MonoBehaviour
     
     public Vector2Int ReturnPlayerPosition()
     {
-        return _currentPlayerPosition;
+        return currentPlayerPosition;
     }
 
     public Transform ReturnMovementCardFolder()
@@ -135,8 +146,27 @@ public class PlayerData : MonoBehaviour
         return movementCardFolder;
     }
 
+    public Transform ReturnAttackCardFolder()
+    {
+        return attackCardFolder;
+    }
+
     public Transform ReturnPlayerObject()
     {
         return gridPlayerObject.transform;
+    }
+
+    public void SavePlayerData()
+    {
+        PlayerSaveManager.SavePlayerData(this, playerName);
+    }
+
+    public void LoadPlayerData()
+    {
+        PlayerSaveData playerSaveData = PlayerSaveManager.LoadPlayerData(transform.name);
+
+        SetPosition(new Vector2Int(playerSaveData.xPosition, playerSaveData.yPosition));
+
+
     }
 }

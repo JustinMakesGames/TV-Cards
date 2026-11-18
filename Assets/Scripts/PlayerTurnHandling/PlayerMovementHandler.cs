@@ -10,6 +10,7 @@ public class PlayerMovementHandler : MonoBehaviour
 
     [SerializeField] private GameObject selectionObject;
     [SerializeField] private float playerMovementSpeed;
+    [SerializeField] private GameObject movementCardFolder;
 
     private GameObject _currentSelectionObject;
     private bool _canMove;
@@ -59,7 +60,6 @@ public class PlayerMovementHandler : MonoBehaviour
     {
         if (TryGetComponent(out PlayerOrCPUChecker playerOrCPUChecker) && playerOrCPUChecker.PlayerOrCPU() == PlayerOrCPU.CPU)
         {
-            // Add the CPU movement component if the scene doesn't have it yet, so CPUs can always move.
             if (!TryGetComponent(out CPUMovementHandler cpuMovementHandler))
             {
                 cpuMovementHandler = gameObject.AddComponent<CPUMovementHandler>();
@@ -121,6 +121,11 @@ public class PlayerMovementHandler : MonoBehaviour
             if (_card.TryGetComponent(out BasicCardHandler cardHandler))
             {
                 playerData.RemoveBasicCard(cardHandler);
+            }
+
+            if (_card.TryGetComponent(out MovementCardHandling movementCard))
+            {
+                playerData.RemoveMovementCard(movementCard);
             }
         }
 
@@ -205,7 +210,8 @@ public class PlayerMovementHandler : MonoBehaviour
 
         if (TryGetComponent(out PlayerTurnHandling playerTurnHandling))
         {
-            playerTurnHandling.StartPlayerTurn();
+            movementCardFolder?.SetActive(false);
+            playerTurnHandling.PlayerChooseCard();
         }
 
     }

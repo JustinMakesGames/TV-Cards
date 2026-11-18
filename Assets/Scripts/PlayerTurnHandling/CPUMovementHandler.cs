@@ -22,6 +22,9 @@ public class CPUMovementHandler : MonoBehaviour
 
     private const int NoDirection = 4;
 
+    // Score for ending on an opponent's tile: you can't attack someone standing on your own tile.
+    private const int OccupiedTilePenalty = 1000;
+
     private PlayerMovementHandler _movementHandler;
 
     private void Awake()
@@ -36,15 +39,7 @@ public class CPUMovementHandler : MonoBehaviour
 
     private IEnumerator HandleCPUMovement(Vector2Int startPosition, int steps)
     {
-        Vector2Int targetPosition = startPosition;
-
-        if (TryGetComponent(out CPUTargetHandler targetHandler) && targetHandler.ReturnTarget() != null)
-        {
-            targetPosition = targetHandler.ReturnTarget().ReturnPlayerPosition();
-        }
-
-        GameObject[,] grid = GridHandler.Instance.ReturnGrid();
-        List<Vector2Int> path = FindPath(startPosition, targetPosition, steps, grid.GetLength(0), grid.GetLength(1));
+        List<Vector2Int> path = PlanPath(startPosition, steps, out _);
 
         if (path == null)
         {
@@ -64,11 +59,58 @@ public class CPUMovementHandler : MonoBehaviour
         _movementHandler.SelectSpace();
     }
 
-    // Finds a walk of exactly 'steps' moves that never steps straight back (that would refund a step
-    // in PlayerMovementHandler) and ends as close as possible to the target. When the card is bigger than
-    // the distance, the leftover steps turn into a detour around the target.
-    private List<Vector2Int> FindPath(Vector2Int start, Vector2Int target, int steps, int width, int height)
+    // Plans a walk of exactly 'steps' moves. score = how many tiles short of attack range the CPU ends up
+    // (0 = it can hit someone after the walk). Lower is better; CPUCardHandling uses it to pick a card.
+    public List<Vector2Int> PlanPath(Vector2Int start, int steps, out int score)
     {
+        GameObject[,] grid = GridHandler.Instance.ReturnGrid();
+        List<Vector2Int> opponents = CPUBoardHelper.ReturnOpponentPositions(transform);
+        int attackRange = ReturnPreferredRange();
+
+        return FindPath(start, steps, grid.GetLength(0), grid.GetLength(1),
+            position => ScoreEndPosition(position, opponents, attackRange), out score);
+    }
+
+    // The longest attack range the CPU holds, so it can stand back and still hit. 1 when it has no attack cards.
+    private int ReturnPreferredRange()
+    {
+        int range = 1;
+
+        if (TryGetComponent(out PlayerData playerData))
+        {
+            foreach (AttackCardHandler card in CPUBoardHelper.ReturnAttackCards(playerData))
+            {
+                range = Mathf.Max(range, card.ReturnRange());
+            }
+        }
+
+        return range;
+    }
+
+    private int ScoreEndPosition(Vector2Int position, List<Vector2Int> opponents, int attackRange)
+    {
+        if (opponents.Count == 0) return 0;
+
+        int best = int.MaxValue;
+
+        foreach (Vector2Int opponent in opponents)
+        {
+            int distance = CPUBoardHelper.ReturnDistance(position, opponent);
+            if (distance == 0) return OccupiedTilePenalty;
+
+            best = Mathf.Min(best, Mathf.Max(0, distance - attackRange));
+        }
+
+        return best;
+    }
+
+    // Finds a walk of exactly 'steps' moves that never steps straight back (that would refund a step
+    // in PlayerMovementHandler) and ends on the lowest-scoring tile. Ties are broken randomly so the CPU
+    // doesn't walk the same route every time.
+    private List<Vector2Int> FindPath(Vector2Int start, int steps, int width, int height,
+        System.Func<Vector2Int, int> scoreEnd, out int bestScore)
+    {
+        bestScore = int.MaxValue;
         int stateCount = width * height * 5;
 
         // parents[k][state] = state at step k - 1 that led here, or -1 when unreached.
@@ -79,7 +121,7 @@ public class CPUMovementHandler : MonoBehaviour
             for (int s = 0; s < stateCount; s++) parents[k][s] = -1;
         }
 
-        List<int> currentStates = new List<int> { EncodeState(start, NoDirection, width, height) };
+        List<int> currentStates = new List<int> { EncodeState(start, NoDirection, width) };
         parents[0][currentStates[0]] = currentStates[0];
 
         int[] directionOrder = { 0, 1, 2, 3 };
@@ -90,7 +132,7 @@ public class CPUMovementHandler : MonoBehaviour
 
             foreach (int state in currentStates)
             {
-                DecodeState(state, width, height, out Vector2Int position, out int lastDirection);
+                DecodeState(state, width, out Vector2Int position, out int lastDirection);
                 Shuffle(directionOrder);
 
                 foreach (int direction in directionOrder)
@@ -100,7 +142,7 @@ public class CPUMovementHandler : MonoBehaviour
                     Vector2Int next = position + Directions[direction];
                     if (next.x < 0 || next.x >= width || next.y < 0 || next.y >= height) continue;
 
-                    int nextState = EncodeState(next, direction, width, height);
+                    int nextState = EncodeState(next, direction, width);
                     if (parents[k + 1][nextState] != -1) continue;
 
                     parents[k + 1][nextState] = state;
@@ -113,20 +155,19 @@ public class CPUMovementHandler : MonoBehaviour
         }
 
         List<int> bestStates = new List<int>();
-        int bestDistance = int.MaxValue;
 
         foreach (int state in currentStates)
         {
-            DecodeState(state, width, height, out Vector2Int position, out _);
-            int distance = Mathf.Abs(position.x - target.x) + Mathf.Abs(position.y - target.y);
+            DecodeState(state, width, out Vector2Int position, out _);
+            int score = scoreEnd(position);
 
-            if (distance < bestDistance)
+            if (score < bestScore)
             {
-                bestDistance = distance;
+                bestScore = score;
                 bestStates.Clear();
             }
 
-            if (distance == bestDistance) bestStates.Add(state);
+            if (score == bestScore) bestStates.Add(state);
         }
 
         int endState = bestStates[Random.Range(0, bestStates.Count)];
@@ -134,7 +175,7 @@ public class CPUMovementHandler : MonoBehaviour
         List<Vector2Int> path = new List<Vector2Int>();
         for (int k = steps; k > 0; k--)
         {
-            DecodeState(endState, width, height, out _, out int direction);
+            DecodeState(endState, width, out _, out int direction);
             path.Add(Directions[direction]);
             endState = parents[k][endState];
         }
@@ -143,12 +184,12 @@ public class CPUMovementHandler : MonoBehaviour
         return path;
     }
 
-    private int EncodeState(Vector2Int position, int lastDirection, int width, int height)
+    private int EncodeState(Vector2Int position, int lastDirection, int width)
     {
         return (position.y * width + position.x) * 5 + lastDirection;
     }
 
-    private void DecodeState(int state, int width, int height, out Vector2Int position, out int lastDirection)
+    private void DecodeState(int state, int width, out Vector2Int position, out int lastDirection)
     {
         lastDirection = state % 5;
         int cell = state / 5;

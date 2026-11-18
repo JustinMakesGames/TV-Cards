@@ -277,7 +277,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 10
+  m_SortingOrder: -25
   m_TargetDisplay: 0
 --- !u!114 &6482401847924916479
 MonoBehaviour:
@@ -411,7 +411,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6786790877181845459
 RectTransform:
   m_ObjectHideFlags: 0
@@ -558,6 +558,7 @@ GameObject:
   - component: {fileID: 8552757188776870629}
   - component: {fileID: 4070077145164591639}
   - component: {fileID: 5443975298899479644}
+  - component: {fileID: 721997915757427024}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -896,7 +897,6 @@ MonoBehaviour:
   maximumCardMovement: 5
   minimumThinkTime: 0.5
   maximumThinkTime: 2
-  matchingCardPreference: 2
   chosenCardHoverTime: 0.6
 --- !u!114 &2400012053457909361
 MonoBehaviour:
@@ -958,10 +958,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerTurnHandling
   optionsFolder: {fileID: 8744000573608580528}
-  options:
-  - {fileID: 1088339174106740778}
-  - {fileID: 7566949409597557581}
-  - {fileID: 2879739727108436474}
 --- !u!114 &5443975298899479644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -976,6 +972,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovementHandler
   selectionObject: {fileID: 4475494518829443528, guid: 3b57314c4c64e6e4cbba8130140e8dcd, type: 3}
   playerMovementSpeed: 5
+  movementCardFolder: {fileID: 1088339174106740778}
+--- !u!114 &721997915757427024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3566194632423379902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97cc957ec51205747bb23823aad5817f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackHandler
+  cardFolder: {fileID: 7566949409597557581}
 --- !u!1 &4094255516985592370
 GameObject:
   m_ObjectHideFlags: 0
@@ -1421,10 +1431,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8744000573608580528}
     m_Modifications:
+    - target: {fileID: 257592106149251151, guid: e60ff68aa83545f4688f2dca3e7f9df3, type: 3}
+      propertyPath: m_text
+      value: Event
+      objectReference: {fileID: 0}
     - target: {fileID: 2354778577255381058, guid: e60ff68aa83545f4688f2dca3e7f9df3, type: 3}
       propertyPath: cardFolder
       value: 
-      objectReference: {fileID: 2470718034627383312}
+      objectReference: {fileID: 0}
     - target: {fileID: 3842484551246068955, guid: e60ff68aa83545f4688f2dca3e7f9df3, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1507,18 +1521,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4506543448008852046, guid: e60ff68aa83545f4688f2dca3e7f9df3, type: 3}
       propertyPath: m_Name
-      value: CardFolder (2)
+      value: Event
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e60ff68aa83545f4688f2dca3e7f9df3, type: 3}
---- !u!1 &2879739727108436474 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4506543448008852046, guid: e60ff68aa83545f4688f2dca3e7f9df3, type: 3}
-  m_PrefabInstance: {fileID: 1836502613463298996}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &3183954995028217711 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3842484551246068955, guid: e60ff68aa83545f4688f2dca3e7f9df3, type: 3}
@@ -1532,6 +1541,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8744000573608580528}
     m_Modifications:
+    - target: {fileID: 257592106149251151, guid: e60ff68aa83545f4688f2dca3e7f9df3, type: 3}
+      propertyPath: m_text
+      value: Finish
+      objectReference: {fileID: 0}
     - target: {fileID: 2354778577255381058, guid: e60ff68aa83545f4688f2dca3e7f9df3, type: 3}
       propertyPath: cardFolder
       value: 
@@ -1618,7 +1631,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4506543448008852046, guid: e60ff68aa83545f4688f2dca3e7f9df3, type: 3}
       propertyPath: m_Name
-      value: CardFolder (3)
+      value: Finish
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2354778577255381058, guid: e60ff68aa83545f4688f2dca3e7f9df3, type: 3}
@@ -1751,7 +1764,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4506543448008852046, guid: e60ff68aa83545f4688f2dca3e7f9df3, type: 3}
       propertyPath: m_Name
-      value: CardFolder
+      value: Movement
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1776,6 +1789,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8744000573608580528}
     m_Modifications:
+    - target: {fileID: 257592106149251151, guid: e60ff68aa83545f4688f2dca3e7f9df3, type: 3}
+      propertyPath: m_text
+      value: Attack
+      objectReference: {fileID: 0}
     - target: {fileID: 2354778577255381058, guid: e60ff68aa83545f4688f2dca3e7f9df3, type: 3}
       propertyPath: cardFolder
       value: 
@@ -1862,7 +1879,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4506543448008852046, guid: e60ff68aa83545f4688f2dca3e7f9df3, type: 3}
       propertyPath: m_Name
-      value: CardFolder (1)
+      value: Attack
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

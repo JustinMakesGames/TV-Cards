@@ -4,39 +4,38 @@ using UnityEngine;
 public class PlayerAttackHandler : MonoBehaviour
 {
     [SerializeField] private GameObject cardFolder;
-    private int _damage;
-    
+
     public void StartAttack(List<GameObject> gridTiles, int range, int damage)
     {
-        _damage = damage;
         foreach (GameObject tile in gridTiles)
         {
             if (tile.TryGetComponent(out GridTile gridTile))
             {
                 Transform otherPlayer = gridTile.ReturnPlayer();
-                if (!otherPlayer) continue;
-                StealHearts(otherPlayer);
+                if (!otherPlayer || otherPlayer == transform) continue;
+                StealHearts(otherPlayer, damage);
             }
+        }
+
+
+        if (cardFolder) cardFolder.SetActive(false);
+
+        if (TryGetComponent(out PlayerTurnHandling playerTurnHandling))
+        {
+            playerTurnHandling.PlayerChooseCard();
         }
     }
 
-    private void StealHearts(Transform otherPlayer)
+    private void StealHearts(Transform otherPlayer, int damage)
     {
         if (otherPlayer.TryGetComponent(out PlayerData otherPlayerData))
         {
-            otherPlayerData.ChangeHeartPointsAmount(-_damage);
-
+            otherPlayerData.ChangeHeartPointsAmount(-damage);
         }
 
         if (TryGetComponent(out PlayerData playerData))
         {
-            playerData.ChangeHeartPointsAmount(_damage);
-        }
-
-        if (TryGetComponent(out PlayerTurnHandling playerTurnHandling))
-        {
-            cardFolder?.SetActive(false);
-            playerTurnHandling.PlayerChooseCard();
+            playerData.ChangeHeartPointsAmount(damage);
         }
     }
 }

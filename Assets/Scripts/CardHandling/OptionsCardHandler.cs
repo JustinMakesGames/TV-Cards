@@ -16,7 +16,7 @@ public class OptionsCardHandler : BasicCardHandler, ICardHandler
     {
         base.OnPressed(player);
 
-        cardFolder.gameObject.SetActive(true);
+        cardFolder.gameObject?.SetActive(true);
         List<GameObject> cards = ListOfChildren.ReturnListOfChildren(cardFolder);
 
         if (player.TryGetComponent(out PlayerCardPickSystem cardPickSystem))
