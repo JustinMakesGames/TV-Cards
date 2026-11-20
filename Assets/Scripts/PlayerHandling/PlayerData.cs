@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerData : MonoBehaviour
 {
     public string playerName;
+    public Color playerColor = Color.white;
     public int Coins { get; private set; }
     public int HeartPoints { get; private set; }
     public Vector2Int currentPlayerPosition;

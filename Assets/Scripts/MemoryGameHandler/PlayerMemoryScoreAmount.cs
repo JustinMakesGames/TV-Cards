@@ -1,0 +1,21 @@
+using TMPro;
+using UnityEngine;
+
+public class PlayerMemoryScoreAmount : MonoBehaviour
+{
+
+    public int points;
+    [SerializeField] private TMP_Text pointText;
+    public void GivePoints(int pointAmount)
+    {
+        points += pointAmount;
+        if (pointText) pointText.text = points.ToString();
+
+    }
+
+    public void ResetPoints()
+    {
+        points = 0;
+        if (pointText) pointText.text = points.ToString();
+    }
+}
