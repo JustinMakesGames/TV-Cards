@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerData : MonoBehaviour
 {
     public string playerName;
+    public Color playerColor = Color.white;
     public int Coins { get; private set; }
     public int HeartPoints { get; private set; }
     public Vector2Int currentPlayerPosition;
@@ -33,7 +34,7 @@ public class PlayerData : MonoBehaviour
     public void ChangeCoinAmount(int coinNumber)
     {
         Coins += coinNumber;
-        if (coinText) coinText.text = coinNumber.ToString();
+        if (coinText) coinText.text = Coins.ToString();
     }
 
     public void ChangeHeartPointsAmount(int heartPoints)

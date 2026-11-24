@@ -12,7 +12,7 @@ public class BasicCardHandler : MonoBehaviour, ICardHandler
         onHoveredAmount++;
 
         if (onHoveredAmount > 1) return;
-        animator.SetTrigger("Up");
+        if (animator != null) animator.SetTrigger("Up");
     }
 
     public virtual void OnDehovered()
@@ -21,7 +21,7 @@ public class BasicCardHandler : MonoBehaviour, ICardHandler
         onHoveredAmount--;
 
         if (onHoveredAmount > 0) return;
-        animator.SetTrigger("Down");
+        if (animator != null) animator.SetTrigger("Down");
     }
 
     public virtual void OnPressed(Transform player) 
