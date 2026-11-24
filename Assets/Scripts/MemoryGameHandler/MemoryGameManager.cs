@@ -54,6 +54,7 @@ public class MemoryGameManager : MonoBehaviour, IMinigameStart
     [SerializeField] private int roundAmount = 5;
     [SerializeField] private float revealTime = 3f;
     [SerializeField] private float timeBetweenRounds = 1.5f;
+    [SerializeField] private float resultsShowTime = 3f;
     [SerializeField] private TMP_Text roundText;
     [SerializeField] private TMP_Text announcementText;
 
@@ -97,7 +98,10 @@ public class MemoryGameManager : MonoBehaviour, IMinigameStart
         foreach (Transform player in players)
         {
             PlayerMemoryScoreAmount score = GetScore(player);
-            if (score != null) score.ResetPoints();
+            if (score == null) continue;
+
+            score.ResetPoints();
+            score.ShowMemoryScore(true);
         }
 
         if (announcementText != null) announcementText.gameObject.SetActive(false);
@@ -127,6 +131,23 @@ public class MemoryGameManager : MonoBehaviour, IMinigameStart
         }
 
         AnnounceWinner();
+
+        yield return new WaitForSeconds(resultsShowTime);
+
+        ReportResults();
+    }
+
+    private void ReportResults()
+    {
+        Dictionary<string, int> scores = new Dictionary<string, int>();
+
+        foreach (Transform player in players)
+        {
+            PlayerMemoryScoreAmount score = GetScore(player);
+            scores[GetPlayerName(player)] = score != null ? score.points : 0;
+        }
+
+        MinigameSession.Finish(MinigameSession.RankByScore(scores));
     }
 
     private void ResetRound()

@@ -34,7 +34,7 @@ public class PlayerData : MonoBehaviour
     public void ChangeCoinAmount(int coinNumber)
     {
         Coins += coinNumber;
-        if (coinText) coinText.text = coinNumber.ToString();
+        if (coinText) coinText.text = Coins.ToString();
     }
 
     public void ChangeHeartPointsAmount(int heartPoints)

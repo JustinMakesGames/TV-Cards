@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +15,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CameraEvent cameraEvent;
     [SerializeField] private TransformEvent randomMovementCardEvent;
     [SerializeField] private TransformEvent randomAttackCardEvent;
+
+    [Header("Minigames")]
+    [SerializeField] private string[] minigameScenes = { "MemoryMinigameScene" };
+    [SerializeField] private int[] coinsPerPlacement = { 10, 5, 2, 0 };
+
     private int _currentPlayer = -1;
 
     private void Awake()
@@ -72,6 +78,9 @@ public class GameManager : MonoBehaviour
                 playerData.ChangeCoinAmount(10);
                 playerData.ChangeHeartPointsAmount(10);
             }
+
+            PlayerMemoryScoreAmount memoryScore = player.GetComponentInChildren<PlayerMemoryScoreAmount>(true);
+            if (memoryScore) memoryScore.ShowMemoryScore(false);
         }
     }
 
@@ -112,9 +121,9 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator StartPlayerTurn()
     {
-        if (_currentPlayer >= players.Count - 1)
+        if (_currentPlayer >= players.Count - 1 && minigameScenes.Length > 0)
         {
-
+            yield return PlayMinigame();
         }
         _currentPlayer = (_currentPlayer >= players.Count - 1) ? 0 : _currentPlayer + 1;
         cameraEvent?.Invoke(CameraKind.GridCamera);
@@ -124,8 +133,86 @@ public class GameManager : MonoBehaviour
         {
             playerTurnHandling.StartPlayerTurn();
         }
-        
-        
+    }
 
+    private IEnumerator PlayMinigame()
+    {
+        string sceneName = minigameScenes[Random.Range(0, minigameScenes.Length)];
+        Scene mainScene = SceneManager.GetActiveScene();
+        Transform[] mainPlayerHolder = PlayerHolder.ReturnPlayers();
+
+        MinigameSession.Begin(players);
+
+        // Keep the board alive but hidden, so everything is exactly as we left it when we come back.
+        List<GameObject> hiddenObjects = HideMainGame(mainScene);
+
+        yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        Scene minigameScene = SceneManager.GetSceneByName(sceneName);
+        SceneManager.SetActiveScene(minigameScene);
+
+        yield return new WaitUntil(() => MinigameSession.IsFinished);
+
+        List<MinigameResult> results = MinigameSession.Results;
+
+        yield return SceneManager.UnloadSceneAsync(minigameScene);
+        SceneManager.SetActiveScene(mainScene);
+
+        foreach (GameObject hiddenObject in hiddenObjects)
+        {
+            if (hiddenObject) hiddenObject.SetActive(true);
+        }
+
+        // The minigame scene has its own players that replaced these.
+        PlayerHolder.SetPlayers(mainPlayerHolder);
+        MinigameSession.End();
+
+        yield return GiveMinigameRewards(results);
+    }
+
+    private List<GameObject> HideMainGame(Scene mainScene)
+    {
+        List<GameObject> rootObjects = new List<GameObject>(mainScene.GetRootGameObjects());
+        // DontDestroyOnLoad objects (like the grid) live in a separate scene.
+        if (gameObject.scene != mainScene) rootObjects.AddRange(gameObject.scene.GetRootGameObjects());
+
+        List<GameObject> hiddenObjects = new List<GameObject>();
+        foreach (GameObject rootObject in rootObjects)
+        {
+            // Never hide the GameManager itself, or this coroutine would stop.
+            if (rootObject == transform.root.gameObject || !rootObject.activeSelf) continue;
+
+            rootObject.SetActive(false);
+            hiddenObjects.Add(rootObject);
+        }
+
+        return hiddenObjects;
+    }
+
+    private IEnumerator GiveMinigameRewards(List<MinigameResult> results)
+    {
+        cameraEvent?.Invoke(CameraKind.GridCamera);
+        yield return new WaitForSeconds(1);
+
+        string[] placementNames = { "first", "second", "third", "fourth" };
+
+        yield return DialogueSystem.Instance.HandleSingularDialogue("Minigame results!");
+
+        foreach (MinigameResult result in results)
+        {
+            int coins = result.placement - 1 < coinsPerPlacement.Length ? coinsPerPlacement[result.placement - 1] : 0;
+            string placementName = result.placement - 1 < placementNames.Length ? placementNames[result.placement - 1] : $"#{result.placement}";
+
+            Transform player = players.Find(p => p.name == result.playerName);
+            if (player != null && player.TryGetComponent(out PlayerData playerData))
+            {
+                playerData.ChangeCoinAmount(coins);
+            }
+            else
+            {
+                Debug.LogWarning($"No main game player found named {result.playerName}.");
+            }
+
+            yield return DialogueSystem.Instance.HandleSingularDialogue($"{result.playerName} finished {placementName} and gets {coins} coins!");
+        }
     }
 }

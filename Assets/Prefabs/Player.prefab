@@ -412,7 +412,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6786790877181845459
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1005,6 +1005,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMemoryScoreAmount
   points: 0
   pointText: {fileID: 3674450280021595158}
+  memoryScoreObject: {fileID: 7125117480670602683}
+  normalScoreObject: {fileID: 2433665686753702900}
 --- !u!1 &4094255516985592370
 GameObject:
   m_ObjectHideFlags: 0
@@ -1459,7 +1461,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &962509788382390750
 RectTransform:
   m_ObjectHideFlags: 0
