@@ -8,9 +8,6 @@ public enum CardPickingType
     TargetPlayer
 }
 
-// Decides what the CPU presses every time PlayerCardPickSystem hands it a list of cards.
-// TargetPlayer turn: Move (with the card that ends closest to attack range) -> Attack if a card can reach
-// someone -> End Turn.
 [RequireComponent(typeof(PlayerData))]
 public class CPUCardHandling : MonoBehaviour
 {
@@ -37,7 +34,6 @@ public class CPUCardHandling : MonoBehaviour
         List<GameObject> cards = _playerCardPickSystem.ReturnCards();
         if (cards == null || cards.Count == 0) return;
 
-        // Start of the game: everyone picks a face-down turn order card at the same time.
         if (ContainsCard<TurnOrderCard>(cards))
         {
             StartCoroutine(PickTurnOrderCard());
@@ -69,7 +65,6 @@ public class CPUCardHandling : MonoBehaviour
         return ChooseOption(cards);
     }
 
-    // Options menu: always move first, then attack only if it would hit someone, otherwise end the turn.
     private GameObject ChooseOption(List<GameObject> cards)
     {
         GameObject movementOption = ReturnOption(cards, _playerData.ReturnMovementCardFolder());
@@ -86,7 +81,6 @@ public class CPUCardHandling : MonoBehaviour
         return null;
     }
 
-    // Picks the movement card whose best walk ends nearest to attack range of an opponent.
     private GameObject ChooseMovementCard(List<GameObject> cards)
     {
         if (!TryGetComponent(out CPUMovementHandler movementHandler))
@@ -121,7 +115,6 @@ public class CPUCardHandling : MonoBehaviour
         AttackCardHandler bestCard = ReturnBestAttackCard();
         if (bestCard != null && cards.Contains(bestCard.gameObject)) return bestCard.gameObject;
 
-        // Nothing can reach anyone: just press the first attack card so the turn keeps going.
         foreach (GameObject card in cards)
         {
             if (card.TryGetComponent(out AttackCardHandler _)) return card;
@@ -130,7 +123,6 @@ public class CPUCardHandling : MonoBehaviour
         return null;
     }
 
-    // The highest-damage attack card that reaches at least one opponent from where the CPU stands now.
     private AttackCardHandler ReturnBestAttackCard()
     {
         Vector2Int position = _playerData.ReturnPlayerPosition();
@@ -196,8 +188,6 @@ public class CPUCardHandling : MonoBehaviour
         _playerCardPickSystem.SelectCard();
     }
 
-    // Turn order cards are face down, so any card is as good as another: pick one at random.
-    // Other players pick at the same time, so if our card gets taken first we just go for another one.
     private IEnumerator PickTurnOrderCard()
     {
         GameObject chosenCard = null;
@@ -219,7 +209,6 @@ public class CPUCardHandling : MonoBehaviour
             {
                 yield return new WaitForSeconds(Mathf.Max(chosenCardHoverTime, GetRandomThinkTime()));
 
-                // Still ours after hovering on it? Press it. Otherwise loop and pick another card.
                 if (_playerCardPickSystem.ReturnCards().Contains(chosenCard)
                     && _playerCardPickSystem.ReturnCurrentLocation() == _playerCardPickSystem.ReturnCards().IndexOf(chosenCard))
                 {
@@ -235,7 +224,6 @@ public class CPUCardHandling : MonoBehaviour
         }
     }
 
-    // Walks the cursor over to the card one card at a time, like a player would, then presses it.
     private IEnumerator PickCard(GameObject chosenCard)
     {
         while (true)

@@ -115,6 +115,8 @@ public class MemoryGameManager : MonoBehaviour, IMinigameStart
             AssignFruits();
             ShowCardToSearch();
 
+            yield return SceneFader.WaitUntilVisible();
+
             yield return ShowCards();
 
             ShuffleCards();

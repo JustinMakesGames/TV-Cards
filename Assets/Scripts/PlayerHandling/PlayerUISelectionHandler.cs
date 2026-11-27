@@ -26,7 +26,6 @@ public class PlayerUISelectionHandler : MonoBehaviour
 
         if (cursor != null)
         {
-            // The cursor can't be seen if its Canvas is turned off, so make sure it's on
             Canvas canvas = cursor.GetComponentInParent<Canvas>(true);
             if (canvas != null && !canvas.gameObject.activeSelf) canvas.gameObject.SetActive(true);
             cursor.SetActive(true);

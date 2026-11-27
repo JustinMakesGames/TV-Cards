@@ -2823,6 +2823,11 @@ MonoBehaviour:
   cameraEvent: {fileID: 11400000, guid: eb66925c4cecec345a0d8d710c5b57dd, type: 2}
   randomMovementCardEvent: {fileID: 11400000, guid: e8db5d26f815b1249b9a381bb5c22f02, type: 2}
   randomAttackCardEvent: {fileID: 11400000, guid: e07e94bcee94cab49b6c96c3f721b6ee, type: 2}
+  minigameScenes:
+  - MemoryMinigameScene
+  coinsPerPlacement: 0a000000050000000200000000000000
+  fadeDuration: 0.5
+  collectibleSpawner: {fileID: 1538178560}
 --- !u!4 &1259021799
 Transform:
   m_ObjectHideFlags: 0
@@ -3277,6 +3282,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1538178559}
   - component: {fileID: 1538178558}
+  - component: {fileID: 1538178560}
   m_Layer: 0
   m_Name: GridSystem
   m_TagString: Untagged
@@ -3317,6 +3323,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1538178560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1538178557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23ab608e0253baf4cbc48e93a9f3e746, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnRandomCollectiblesOnGrid
+  objectsToSpawn:
+  - prefab: {fileID: 8445650155421140298, guid: 2d4872b925467be4d96f1d16af8a1b3b, type: 3}
+    coverage: 0.1
+    minAmount: 1
+    maxAmount: 10
+  - prefab: {fileID: 6776878348951284645, guid: 8c76ab1249d8aea47960cffa8f5833d9, type: 3}
+    coverage: 0.1
+    minAmount: 1
+    maxAmount: 10
+  maxTotalCoverage: 0.5
 --- !u!1 &1561899214
 GameObject:
   m_ObjectHideFlags: 0
@@ -3497,7 +3525,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1062630d093bc4340b3bc5c93d5dc0dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeScaler
-  timeScale: 1
+  timeScale: 48.84
 --- !u!4 &1611175277
 Transform:
   m_ObjectHideFlags: 0

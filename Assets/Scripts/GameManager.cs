@@ -19,6 +19,11 @@ public class GameManager : MonoBehaviour
     [Header("Minigames")]
     [SerializeField] private string[] minigameScenes = { "MemoryMinigameScene" };
     [SerializeField] private int[] coinsPerPlacement = { 10, 5, 2, 0 };
+    [SerializeField] private float fadeDuration = SceneFader.DefaultDuration;
+
+    [Header("Collectibles")]
+    [Tooltip("Tops up coins and hearts on the board after every minigame. Found automatically if left empty.")]
+    [SerializeField] private SpawnRandomCollectiblesOnGrid collectibleSpawner;
 
     private int _currentPlayer = -1;
 
@@ -42,6 +47,7 @@ public class GameManager : MonoBehaviour
         SetAllPlayerPlacements();
         SetRandomCards();
         SetCoinsAndHearts();
+        SpawnNewCollectibles();
         StartCoroutine(StartPlayerTurn());
     }
 
@@ -143,16 +149,21 @@ public class GameManager : MonoBehaviour
 
         MinigameSession.Begin(players);
 
-        // Keep the board alive but hidden, so everything is exactly as we left it when we come back.
+        yield return SceneFader.FadeToBlack(fadeDuration);
+
         List<GameObject> hiddenObjects = HideMainGame(mainScene);
 
         yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         Scene minigameScene = SceneManager.GetSceneByName(sceneName);
         SceneManager.SetActiveScene(minigameScene);
 
+        yield return SceneFader.FadeFromBlack(fadeDuration);
+
         yield return new WaitUntil(() => MinigameSession.IsFinished);
 
         List<MinigameResult> results = MinigameSession.Results;
+
+        yield return SceneFader.FadeToBlack(fadeDuration);
 
         yield return SceneManager.UnloadSceneAsync(minigameScene);
         SceneManager.SetActiveScene(mainScene);
@@ -162,24 +173,43 @@ public class GameManager : MonoBehaviour
             if (hiddenObject) hiddenObject.SetActive(true);
         }
 
-        // The minigame scene has its own players that replaced these.
         PlayerHolder.SetPlayers(mainPlayerHolder);
         MinigameSession.End();
 
+        cameraEvent?.Invoke(CameraKind.GridCamera);
+        yield return SceneFader.FadeFromBlack(fadeDuration);
+
         yield return GiveMinigameRewards(results);
+
+        SpawnNewCollectibles();
+    }
+
+    private void SpawnNewCollectibles()
+    {
+        if (collectibleSpawner == null)
+        {
+            collectibleSpawner = FindFirstObjectByType<SpawnRandomCollectiblesOnGrid>();
+        }
+
+        if (collectibleSpawner == null)
+        {
+            Debug.LogWarning("No SpawnRandomCollectiblesOnGrid found in the scene, so no new collectibles were spawned.");
+            return;
+        }
+
+        collectibleSpawner.SpawnCollectibles();
     }
 
     private List<GameObject> HideMainGame(Scene mainScene)
     {
         List<GameObject> rootObjects = new List<GameObject>(mainScene.GetRootGameObjects());
-        // DontDestroyOnLoad objects (like the grid) live in a separate scene.
         if (gameObject.scene != mainScene) rootObjects.AddRange(gameObject.scene.GetRootGameObjects());
 
         List<GameObject> hiddenObjects = new List<GameObject>();
         foreach (GameObject rootObject in rootObjects)
         {
-            // Never hide the GameManager itself, or this coroutine would stop.
             if (rootObject == transform.root.gameObject || !rootObject.activeSelf) continue;
+            if (SceneFader.IsFader(rootObject)) continue;
 
             rootObject.SetActive(false);
             hiddenObjects.Add(rootObject);
@@ -190,7 +220,6 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator GiveMinigameRewards(List<MinigameResult> results)
     {
-        cameraEvent?.Invoke(CameraKind.GridCamera);
         yield return new WaitForSeconds(1);
 
         string[] placementNames = { "first", "second", "third", "fourth" };

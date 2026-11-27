@@ -2,10 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Lets a CPU pick a card in the memory minigame.
-// Ahead of time it works out how many of its next picks are right and which ones are wrong:
-// e.g. accuracy 0.7 over 10 picks = 7 right and 3 wrong, in a random order.
-// When that list is used up a new one is made.
 [RequireComponent(typeof(PlayerUISelectionHandler))]
 public class CPUMemoryHandler : MonoBehaviour
 {
@@ -35,7 +31,6 @@ public class CPUMemoryHandler : MonoBehaviour
         int total = Mathf.Max(1, picksPerSchedule);
         int correct = Mathf.RoundToInt(total * accuracy);
 
-        // Always more right than wrong
         int minimumCorrect = total / 2 + 1;
         return Mathf.Clamp(correct, Mathf.Min(minimumCorrect, total), total);
     }
@@ -114,7 +109,6 @@ public class CPUMemoryHandler : MonoBehaviour
         if (_selectionHandler.Coordinates == before && difference.y != 0)
             _selectionHandler.Move(new Vector2Int(0, (int)Mathf.Sign(difference.y)));
 
-        // Blocked by empty slots: just jump to the card
         if (_selectionHandler.Coordinates == before)
             _selectionHandler.SelectCoordinates(target);
     }
@@ -137,7 +131,6 @@ public class CPUMemoryHandler : MonoBehaviour
             }
         }
 
-        // If there are no cards of the kind it wants left, it takes the other kind
         List<Vector2Int> pool = wantsCorrect ? rightCards : wrongCards;
         if (pool.Count == 0) pool = wantsCorrect ? wrongCards : rightCards;
         if (pool.Count == 0) return null;

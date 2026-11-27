@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Shared board questions the CPU asks when it picks cards and plans its walk.
 public static class CPUBoardHelper
 {
     public static List<Vector2Int> ReturnOpponentPositions(Transform self)
@@ -27,7 +26,6 @@ public static class CPUBoardHelper
         return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
     }
 
-    // Same shape as AttackCardHandler's range: a diamond around the attacker, without the attacker's own tile.
     public static bool CanHitFrom(Vector2Int from, int range, List<Vector2Int> opponents)
     {
         foreach (Vector2Int opponent in opponents)

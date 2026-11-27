@@ -5,7 +5,7 @@ public class CardHandler : BasicCardHandler, ICardHandler
 {
     [SerializeField] private string fruitName;
     [SerializeField] private Sprite fruitImage;
-    [SerializeField] private Image fruitDisplay;   // optional: the Image that shows the fruit (e.g. FrontCard)
+    [SerializeField] private Image fruitDisplay;
 
     public FruitObject Fruit { get; private set; }
 

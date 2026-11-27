@@ -20,7 +20,6 @@ public class CancelCardHandler : MonoBehaviour
 
         foreach (GameObject folder in cardFolders)
         {
-            // The folder was open but no card was used, so the option shouldn't count as used.
             if (folder.activeSelf && playerTurnHandling) playerTurnHandling.RestoreOption(folder);
 
             folder.SetActive(false);

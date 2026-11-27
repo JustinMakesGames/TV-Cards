@@ -22,7 +22,6 @@ public class CPUMovementHandler : MonoBehaviour
 
     private const int NoDirection = 4;
 
-    // Score for ending on an opponent's tile: you can't attack someone standing on your own tile.
     private const int OccupiedTilePenalty = 1000;
 
     private PlayerMovementHandler _movementHandler;
@@ -59,8 +58,6 @@ public class CPUMovementHandler : MonoBehaviour
         _movementHandler.SelectSpace();
     }
 
-    // Plans a walk of exactly 'steps' moves. score = how many tiles short of attack range the CPU ends up
-    // (0 = it can hit someone after the walk). Lower is better; CPUCardHandling uses it to pick a card.
     public List<Vector2Int> PlanPath(Vector2Int start, int steps, out int score)
     {
         GameObject[,] grid = GridHandler.Instance.ReturnGrid();
@@ -71,7 +68,6 @@ public class CPUMovementHandler : MonoBehaviour
             position => ScoreEndPosition(position, opponents, attackRange), out score);
     }
 
-    // The longest attack range the CPU holds, so it can stand back and still hit. 1 when it has no attack cards.
     private int ReturnPreferredRange()
     {
         int range = 1;
@@ -104,16 +100,12 @@ public class CPUMovementHandler : MonoBehaviour
         return best;
     }
 
-    // Finds a walk of exactly 'steps' moves that never steps straight back (that would refund a step
-    // in PlayerMovementHandler) and ends on the lowest-scoring tile. Ties are broken randomly so the CPU
-    // doesn't walk the same route every time.
     private List<Vector2Int> FindPath(Vector2Int start, int steps, int width, int height,
         System.Func<Vector2Int, int> scoreEnd, out int bestScore)
     {
         bestScore = int.MaxValue;
         int stateCount = width * height * 5;
 
-        // parents[k][state] = state at step k - 1 that led here, or -1 when unreached.
         int[][] parents = new int[steps + 1][];
         for (int k = 0; k <= steps; k++)
         {

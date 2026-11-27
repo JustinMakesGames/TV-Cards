@@ -24,9 +24,6 @@ public class PlayerMemoryScoreAmount : MonoBehaviour
         if (pointText) pointText.text = points.ToString();
     }
 
-    /// <summary>
-    /// true = show the memory minigame score, false = show the normal coins/hearts score.
-    /// </summary>
     public void ShowMemoryScore(bool show)
     {
         if (memoryScoreObject) memoryScoreObject.SetActive(show);

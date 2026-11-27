@@ -4,7 +4,7 @@ using UnityEngine;
 public struct MinigameResult
 {
     public string playerName;
-    public int placement; // 1 = first place
+    public int placement;
 
     public MinigameResult(string playerName, int placement)
     {
@@ -13,9 +13,6 @@ public struct MinigameResult
     }
 }
 
-/// <summary>
-/// Shared state between the main game and a minigame scene that is loaded on top of it.
-/// </summary>
 public static class MinigameSession
 {
     public static bool IsRunning { get; private set; }
@@ -47,9 +44,6 @@ public static class MinigameSession
         IsFinished = false;
     }
 
-    /// <summary>
-    /// Copies settings from the main game players (like Player/CPU) onto the minigame players with the same name.
-    /// </summary>
     public static void ApplyMainGamePlayerSettings(IEnumerable<Transform> minigamePlayers)
     {
         if (!IsRunning) return;
@@ -67,9 +61,6 @@ public static class MinigameSession
         }
     }
 
-    /// <summary>
-    /// Builds placements from scores. Tied players share the same placement (e.g. 1, 1, 3, 4).
-    /// </summary>
     public static List<MinigameResult> RankByScore(Dictionary<string, int> scores)
     {
         List<MinigameResult> results = new List<MinigameResult>();

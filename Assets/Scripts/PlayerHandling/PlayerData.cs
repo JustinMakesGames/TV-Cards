@@ -121,7 +121,7 @@ public class PlayerData : MonoBehaviour
 
         if (grid[currentPlayerPosition.x, currentPlayerPosition.y].TryGetComponent(out GridTile oldTile) && oldTile.ReturnPlayer() == transform)
         {
-            oldTile.DeletePlayuer();
+            oldTile.DeletePlayer();
         }
 
         currentPlayerPosition = gridPosition;

@@ -2,19 +2,36 @@ using UnityEngine;
 
 public class GridTile : MonoBehaviour
 {
-
-    private CollectibleHandler _collectibleHandler;
+    
+    private GameObject _collectible;
+    private GameObject _collectiblePrefab;
     private Transform _player;
 
     public virtual void OnWalk(Transform player)
     {
 
-        if (_collectibleHandler != null)
+        if (_collectible != null && _collectible.TryGetComponent(out CollectibleHandler collectibleHandler))
         {
-            _collectibleHandler.GetCollectible(player);
-            _collectibleHandler = null;
+            collectibleHandler.GetCollectible(player);
+            Destroy(_collectible);
 
         }
+    }
+
+    public void GetCollectible(GameObject collectible)
+    {
+        _collectiblePrefab = collectible;
+        _collectible = Instantiate(collectible, transform.position + Vector3.up * 0.2f, transform.rotation);
+    }
+
+    public bool HasCollectible()
+    {
+        return _collectible != null;
+    }
+
+    public GameObject ReturnCollectiblePrefab()
+    {
+        return HasCollectible() ? _collectiblePrefab : null;
     }
 
     public void SetPlayer(Transform player)
@@ -22,7 +39,7 @@ public class GridTile : MonoBehaviour
         _player = player;
     }
 
-    public void DeletePlayuer()
+    public void DeletePlayer()
     {
         _player = null;
     }

@@ -1,13 +1,12 @@
 using UnityEngine;
 
-// Moves this card to random spots inside its Canvas, one after another.
 [RequireComponent(typeof(RectTransform))]
 public class CardMover : MonoBehaviour
 {
-    [SerializeField] private float speed = 300f;          // canvas units per second
-    [SerializeField] private float waitAtTarget = 0f;     // pause (seconds) before picking the next spot
-    [SerializeField] private bool moveOnStart = false;     // the MemoryGameManager starts the movement while shuffling
-    [SerializeField] private MemoryGameManager gameManager;   // found automatically if left empty
+    [SerializeField] private float speed = 300f;
+    [SerializeField] private float waitAtTarget = 0f;
+    [SerializeField] private bool moveOnStart = false;
+    [SerializeField] private MemoryGameManager gameManager;
 
     private RectTransform rectTransform;
     private RectTransform canvasRect;
@@ -32,7 +31,6 @@ public class CardMover : MonoBehaviour
         if (gameManager == null) gameManager = FindFirstObjectByType<MemoryGameManager>();
     }
 
-    // Moves the card to the slot it currently has in the MemoryGameManager's cards[,] grid
     public void MoveToGridPosition()
     {
         if (gameManager != null && gameManager.TryGetGridPosition(transform, out int column, out int row))
@@ -41,14 +39,12 @@ public class CardMover : MonoBehaviour
             Debug.LogWarning($"{name} is not in the memory card grid.", this);
     }
 
-    // Same as MoveToGridPosition(column, row), but with a custom speed
     public void MoveToGridPosition(int column, int row, float moveSpeed)
     {
         speed = moveSpeed;
         MoveToGridPosition(column, row);
     }
 
-    // Moves the card to a specific cards[column, row] slot, then stops there
     public void MoveToGridPosition(int column, int row)
     {
         if (canvasRect == null || gameManager == null) return;
@@ -64,7 +60,6 @@ public class CardMover : MonoBehaviour
         if (moveOnStart) StartMoving();
     }
 
-    // Starts wandering around the canvas with a custom speed
     public void StartMoving(float moveSpeed)
     {
         speed = moveSpeed;
@@ -94,7 +89,6 @@ public class CardMover : MonoBehaviour
             return;
         }
 
-        // Work in the canvas's local space so it doesn't matter what the card's parent is
         Vector2 current = canvasRect.InverseTransformPoint(rectTransform.position);
         Vector2 next = Vector2.MoveTowards(current, target, speed * Time.deltaTime);
         rectTransform.position = canvasRect.TransformPoint(next);
@@ -103,7 +97,6 @@ public class CardMover : MonoBehaviour
         {
             if (movingToSlot)
             {
-                // Arrived at its grid slot: stay there
                 movingToSlot = false;
                 isMoving = false;
                 return;
@@ -119,7 +112,6 @@ public class CardMover : MonoBehaviour
         Rect bounds = canvasRect.rect;
         Vector2 halfCard = rectTransform.rect.size * 0.5f;
 
-        // Keep the whole card inside the canvas
         float minX = bounds.xMin + halfCard.x, maxX = bounds.xMax - halfCard.x;
         float minY = bounds.yMin + halfCard.y, maxY = bounds.yMax - halfCard.y;
 

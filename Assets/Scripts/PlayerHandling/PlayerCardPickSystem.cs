@@ -39,7 +39,6 @@ public class PlayerCardPickSystem : MonoBehaviour
 
     public void DehoverCards()
     {
-        //HandleDehover();
     }
 
     public void ResetCards(List<GameObject> cards)

@@ -1894,6 +1894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndTurnCardHandler
   animator: {fileID: 6426142621768719504}
+  movementCardEvent: {fileID: 11400000, guid: e8db5d26f815b1249b9a381bb5c22f02, type: 2}
 --- !u!224 &1858432200836369490 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3842484551246068955, guid: e60ff68aa83545f4688f2dca3e7f9df3, type: 3}

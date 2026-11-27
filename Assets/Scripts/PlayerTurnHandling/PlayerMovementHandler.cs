@@ -201,6 +201,8 @@ public class PlayerMovementHandler : MonoBehaviour
             Vector3 position = ReturnPosition(_walkedTiles[i]);
 
             yield return StartCoroutine(MoveToPosition(_walkedTiles[i], position));
+
+            GetWalkedTileCollectible(_walkedTiles[i]);
         }
 
         if (TryGetComponent(out PlayerData playerData))
@@ -230,6 +232,15 @@ public class PlayerMovementHandler : MonoBehaviour
 
         _playerObject.position = position;
     }
+
+    private void GetWalkedTileCollectible(GameObject tile)
+    {
+        if (tile.TryGetComponent(out GridTile gridTile))
+        {
+            gridTile.OnWalk(transform);
+        }
+    }
+    
 
     
     

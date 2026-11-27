@@ -8,7 +8,7 @@ public class CardFace : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (front == null) return; // avoids errors while you're still assigning fields
+        if (front == null) return;
 
         Camera cam = Camera.main;
         Vector3 viewDir = cam != null ? cam.transform.forward : Vector3.forward;
